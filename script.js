@@ -268,12 +268,11 @@ const CONFIG = {
     { category: "가이드", name: "캔바 표지 제작 가이드", url: "https://naver.me/FQuy1tt1" },
     { category: "가이드", name: "전자책 표지 만들기_샘플 자료", url: "https://naver.me/5FDENWBh" },
     { category: "가이드", name: "AI로 제목 뽑을 때 효과적인 프롬프트 작성하기", url: "https://naver.me/xIF1N6r8" },
-    { category: "가이드", name: "크몽 등록 완벽 가이드", url: "" },
-    { category: "가이드", name: "PDF 변환 방법 총정리", url: "" },
+    { category: "가이드", name: "PDF 변환 방법 총정리", url: "https://naver.me/xM5nep9x" },
     { category: "예시", name: "전문가 소개하기", url: "https://naver.me/xjYUbTCz" },
     { category: "예시", name: "전자책 제목 예시 모음", url: "https://naver.me/xuFmS15U" },
-    { category: "예시", name: "Story Asset Lab 사용 안내", url: "https://naver.me/FfsByjlB" },
-    { category: "예시", name: "크몽 상세페이지 작성 예시", url: "" }
+    { category: "예시", name: "목차정하기 막막하다면 Story Asset Lab을 활용하세요.", url: "https://naver.me/FfsByjlB" },
+    { category: "예시", name: "크몽 상세페이지 작성 예시", url: "https://naver.me/Gqf9jGV6" }
   ],
 
   // ⑥ 스페셜 미션 (5차 완료 후, 6차 전)
