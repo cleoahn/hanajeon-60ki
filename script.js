@@ -303,14 +303,14 @@ const CONFIG = {
 
   // ⑦ 작업 현황판
   statusBoard: [
-    { name: "이영희", status: "1차 시작" },
-    { name: "너구리", status: "1차 완료" },
-    { name: "장미영", status: "1차 시작" },
-    { name: "최희경", status: "1차 시작" },
-    { name: "조용한관찰자", status: "대기" },
-    { name: "매일조금씩", status: "대기" },
-    { name: "드디어나도", status: "대기" },
-    { name: "처음해보는", status: "대기" }
+    { name: "행복한블로거", status: "1차 완료" },
+    { name: "글쓰는직장인", status: "3차 완료" },
+    { name: "차분한하루", status: "2차 완료" },
+    { name: "꿈꾸는엄마", status: "입장 완료" },
+    { name: "조용한관찰자", status: "4차 완료" },
+    { name: "매일조금씩", status: "6차 완료" },
+    { name: "드디어나도", status: "7차 완료(원고 완성)" },
+    { name: "처음해보는", status: "5차 완료" }
   ]
 };
 
