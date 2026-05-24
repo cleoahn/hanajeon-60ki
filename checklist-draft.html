@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>초고 완성 체크리스트 — 한나전</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #FF6B2B; --orange-light: #FFF3EE; --orange-border: #FFD4C0;
+    --green: #27AE60; --green-light: #EDFAF3; --green-border: #A8E6C3;
+    --blue: #4A90D9; --blue-light: #EDF5FF; --blue-border: #B3D4F5;
+    --ink: #1A1A2E; --ink-2: #3D3D5C; --muted: #8888AA;
+    --bg: #FAFAFA; --card: #FFFFFF; --radius: 14px;
+  }
+  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh; padding: 40px 20px 80px; }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 36px; }
+  .badge { display: inline-block; background: var(--green); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: .5px;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .header h1 { font-size: 26px; font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+  .header p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .progress-wrap { margin-bottom: 32px; }
+  .progress-meta { display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; }
+  .progress-label { font-size: 13px; color: var(--muted); }
+  .progress-count { font-size: 14px; font-weight: 700; color: var(--green); }
+  .progress-bar { background: #EAEAF0; border-radius: 99px; height: 8px; }
+  .progress-fill { height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--green), #5DCCAA); transition: width .4s ease; width: 0%; }
+
+  .section { margin-bottom: 24px; }
+  .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    padding-bottom: 10px; border-bottom: 1.5px solid #EAEAF0; }
+  .section-icon { font-size: 18px; }
+  .section-title { font-size: 14px; font-weight: 700; color: var(--ink-2); }
+  .section-count { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  .check-item { background: var(--card); border: 1.5px solid #EAEAF0;
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 10px;
+    cursor: pointer; transition: all .2s; display: flex; align-items: flex-start; gap: 14px; }
+  .check-item:hover { border-color: var(--green-border); background: #FDFFF9; }
+  .check-item.checked { border-color: var(--green); background: var(--green-light); }
+
+  .check-box { width: 22px; height: 22px; border-radius: 6px; border: 2px solid #DDDDED;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all .2s; margin-top: 1px; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); }
+  .check-box svg { display: none; }
+  .check-item.checked .check-box svg { display: block; }
+
+  .check-content { flex: 1; }
+  .check-text { font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.5;
+    margin-bottom: 4px; }
+  .check-sub { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .check-item.checked .check-text { color: var(--green); }
+  .check-item.checked .check-sub { color: #5DAB82; }
+
+  /* 형식 체크 섹션 — 파란 계열 */
+  .section.format .check-item:hover { border-color: var(--blue-border); background: #F8FBFF; }
+  .section.format .check-item.checked { border-color: var(--blue); background: var(--blue-light); }
+  .section.format .check-item.checked .check-box { background: var(--blue); border-color: var(--blue); }
+  .section.format .check-item.checked .check-text { color: var(--blue); }
+  .section.format .check-item.checked .check-sub { color: #4A80C0; }
+  .section.format .check-item:hover { border-color: var(--blue-border); }
+
+  .result { display: none; background: var(--green-light); border: 1.5px solid var(--green-border);
+    border-radius: var(--radius); padding: 28px; margin-top: 32px; text-align: center; }
+  .result.show { display: block; }
+  .result.incomplete { background: var(--orange-light); border-color: var(--orange-border); }
+  .result-emoji { font-size: 48px; margin-bottom: 14px; }
+  .result h2 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+  .result p { font-size: 14px; color: var(--ink-2); line-height: 1.7; }
+  .result.show h2 { color: var(--green); }
+  .result.incomplete h2 { color: var(--orange); }
+
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+  .btn { padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700;
+    cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary:hover { background: #1E9050; transform: translateY(-1px); }
+  .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid #DDDDED; }
+  .btn-outline:hover { border-color: var(--green); color: var(--green); }
+
+  @media (max-width: 600px) {
+    .btn { width: 100%; }
+    .actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">✅ 한나전 체크리스트</div>
+    <h1>초고 완성 체크리스트</h1>
+    <p>모든 항목을 체크하면 초고가 완성된 거예요.<br>하나씩 눌러서 확인해보세요.</p>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta">
+      <span class="progress-label">완료 항목</span>
+      <span class="progress-count"><span id="doneCount">0</span> / 12</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- 📄 분량 체크 -->
+  <div class="section content">
+    <div class="section-header">
+      <span class="section-icon">📄</span>
+      <span class="section-title">분량 체크</span>
+      <span class="section-count" id="sec1count">0 / 3</span>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec1')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">모든 챕터(목차)에 내용이 채워져 있다</div>
+        <div class="check-sub">비어 있는 챕터가 없는지 목차 순서대로 훑어보세요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec1')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">각 챕터가 최소 1,200~1,500자 이상이다</div>
+        <div class="check-sub">억지로 늘리기보다 내 경험과 생각으로 채워보세요. 내용이 가장 중요해요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec1')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">글 전체를 처음부터 끝까지 한 번 읽었다</div>
+        <div class="check-sub">화면으로만 보지 말고 소리 내어 읽어보면 어색한 부분이 잘 보여요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💡 내용 체크 -->
+  <div class="section content">
+    <div class="section-header">
+      <span class="section-icon">💡</span>
+      <span class="section-title">내용 체크</span>
+      <span class="section-count" id="sec2count">0 / 4</span>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec2')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">제목(목차 소제목)과 본문 내용이 연결된다</div>
+        <div class="check-sub">소제목을 보고 본문을 읽었을 때 '다른 이야기다'는 느낌이 없어야 해요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec2')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">내 경험이 최소 한 챕터 이상에 담겨 있다</div>
+        <div class="check-sub">'나만 아는 것', '내가 직접 겪은 것'이 한 곳이라도 있으면 OK예요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec2')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">"이거 내 이야기다" 싶은 문장이 하나 이상 있다</div>
+        <div class="check-sub">독자가 공감할 수 있는 진짜 내 목소리가 담긴 문장인지 확인해보세요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec2')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">목차 순서대로 이야기가 자연스럽게 흐른다</div>
+        <div class="check-sub">앞 챕터와 뒤 챕터 사이에 갑작스러운 전환이 없는지 확인해보세요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🗂️ 형식 체크 -->
+  <div class="section format">
+    <div class="section-header">
+      <span class="section-icon">🗂️</span>
+      <span class="section-title">형식 체크</span>
+      <span class="section-count" id="sec3count">0 / 5</span>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec3')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">출력해서 종이로 한 번 읽어봤다</div>
+        <div class="check-sub">화면으로 볼 때와 종이로 볼 때 다르게 보여요. 출력 한 번이 교정 세 번보다 효과적이에요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec3')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">오타와 맞춤법을 검사했다</div>
+        <div class="check-sub">네이버 맞춤법 검사기 또는 부산대 맞춤법 검사기(speller.cs.pusan.ac.kr) 추천해요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec3')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">내용을 강조하는 이미지를 넣었다</div>
+        <div class="check-sub">글만 빽빽한 것보다 한 페이지에 이미지 하나가 있으면 훨씬 읽기 좋아요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec3')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">페이지 구성 순서를 확인했다</div>
+        <div class="check-sub">표지 → 목차 → 본문(챕터 3페이지 이상) → 마무리 순서인지 확인해보세요</div>
+      </div>
+    </div>
+    <div class="check-item" onclick="toggle(this, 'sec3')">
+      <div class="check-box"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="check-content">
+        <div class="check-text">저작권 표시를 넣었다</div>
+        <div class="check-sub">마지막 페이지에 예시: "© 2025. [이름] all rights reserved." 복붙해서 사용하세요</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-outline" onclick="resetAll()">🔄 다시 체크하기</button>
+    <button class="btn btn-primary" onclick="checkResult()">✅ 완성 여부 확인하기</button>
+  </div>
+
+  <div class="result" id="resultCard">
+    <div class="result-emoji" id="resultEmoji">🎉</div>
+    <h2 id="resultTitle"></h2>
+    <p id="resultMsg"></p>
+  </div>
+</div>
+
+<script>
+  const sectionCounts = { sec1: 0, sec2: 0, sec3: 0 };
+  const sectionTotals = { sec1: 3, sec2: 4, sec3: 5 };
+  let totalDone = 0;
+  const TOTAL = 12;
+
+  function toggle(el, section) {
+    const wasChecked = el.classList.contains('checked');
+    el.classList.toggle('checked');
+    if (wasChecked) { sectionCounts[section]--; totalDone--; }
+    else            { sectionCounts[section]++; totalDone++; }
+    document.getElementById('doneCount').textContent = totalDone;
+    document.getElementById('progressFill').style.width = (totalDone / TOTAL * 100) + '%';
+    const idx = section === 'sec1' ? 1 : section === 'sec2' ? 2 : 3;
+    document.getElementById(`sec${idx}count`).textContent =
+      `${sectionCounts[section]} / ${sectionTotals[section]}`;
+    const card = document.getElementById('resultCard');
+    if (card.classList.contains('show') || card.classList.contains('incomplete')) {
+      card.classList.remove('show','incomplete');
+    }
+  }
+
+  function checkResult() {
+    const card = document.getElementById('resultCard');
+    card.classList.remove('show','incomplete');
+    if (totalDone === TOTAL) {
+      document.getElementById('resultEmoji').textContent = '🎉';
+      document.getElementById('resultTitle').textContent = '초고 완성이에요!';
+      document.getElementById('resultMsg').textContent =
+        '모든 항목을 완료했어요. 지금 바로 전자책 파일로 변환해도 좋아요!\n수고하셨습니다 😊';
+      card.classList.add('show');
+    } else {
+      document.getElementById('resultEmoji').textContent = '💪';
+      document.getElementById('resultTitle').textContent = '조금만 더 가봐요!';
+      document.getElementById('resultMsg').textContent =
+        `${TOTAL - totalDone}개 항목이 남아있어요. 하나씩 완성하다 보면 어느새 초고가 완성되어 있을 거예요.`;
+      card.classList.add('incomplete');
+    }
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetAll() {
+    if (confirm('체크한 항목을 모두 초기화할까요?')) {
+      document.querySelectorAll('.check-item').forEach(el => el.classList.remove('checked'));
+      Object.keys(sectionCounts).forEach(k => sectionCounts[k] = 0);
+      totalDone = 0;
+      document.getElementById('doneCount').textContent = '0';
+      document.getElementById('progressFill').style.width = '0%';
+      ['sec1count','sec2count','sec3count'].forEach((id, i) => {
+        const sec = ['sec1','sec2','sec3'][i];
+        document.getElementById(id).textContent = `0 / ${sectionTotals[sec]}`;
+      });
+      const card = document.getElementById('resultCard');
+      card.classList.remove('show','incomplete');
+    }
+  }
+</script>
+</body>
+</html>

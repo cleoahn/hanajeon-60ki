@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기획안 작성 템플릿 — 한나전</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #FF6B2B;
+    --orange-light: #FFF3EE;
+    --orange-border: #FFD4C0;
+    --ink: #1A1A2E;
+    --ink-2: #3D3D5C;
+    --muted: #8888AA;
+    --bg: #FAFAFA;
+    --card: #FFFFFF;
+    --radius: 14px;
+    --what: #FF6B2B; --what-bg: #FFF3EE; --what-border: #FFD4C0;
+    --why:  #4A90D9; --why-bg:  #EDF5FF; --why-border:  #B3D4F5;
+    --who:  #27AE60; --who-bg:  #EDFAF3; --who-border:  #A8E6C3;
+    --how:  #9B59B6; --how-bg:  #F6EFFE; --how-border:  #D7B8F2;
+  }
+  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh; padding: 40px 20px 80px; }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 40px; }
+  .badge { display: inline-block; background: var(--orange); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: .5px;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .header h1 { font-size: 26px; font-weight: 800; color: var(--ink); line-height: 1.35; margin-bottom: 10px; }
+  .header p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .progress-bar { background: #EAEAF0; border-radius: 99px; height: 6px; margin-bottom: 40px; }
+  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--orange), #FF9A5C);
+    transition: width .4s ease; width: 0%; }
+
+  .section { background: var(--card); border: 1.5px solid; border-radius: var(--radius);
+    padding: 28px 28px 24px; margin-bottom: 20px; transition: box-shadow .2s; }
+  .section:hover { box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .section.what { border-color: var(--what-border); }
+  .section.why  { border-color: var(--why-border); }
+  .section.who  { border-color: var(--who-border); }
+  .section.how  { border-color: var(--how-border); }
+
+  .sec-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+  .badge-letter { width: 40px; height: 40px; border-radius: 10px; display: flex;
+    align-items: center; justify-content: center; font-weight: 900; font-size: 16px; flex-shrink: 0; }
+  .what .badge-letter { background: var(--what-bg); color: var(--what); }
+  .why  .badge-letter { background: var(--why-bg);  color: var(--why); }
+  .who  .badge-letter { background: var(--who-bg);  color: var(--who); }
+  .how  .badge-letter { background: var(--how-bg);  color: var(--how); }
+  .sec-title h2 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .sec-title p  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  textarea {
+    width: 100%; padding: 14px 16px; border: 1.5px solid #EAEAF0;
+    border-radius: 10px; font-family: inherit; font-size: 14px; color: var(--ink);
+    background: var(--bg); resize: vertical; min-height: 110px; outline: none;
+    line-height: 1.7; transition: border-color .2s, background .2s;
+  }
+  textarea::placeholder { color: #B0B0CC; }
+  textarea:focus { border-color: var(--orange); background: #fff; }
+  .char-count { text-align: right; font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  .tip { background: var(--orange-light); border-left: 3px solid var(--orange);
+    border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 14px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+  .tip strong { color: var(--orange); }
+
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+  .btn { padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700;
+    cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: var(--orange); color: #fff; }
+  .btn-primary:hover { background: #E85520; transform: translateY(-1px); }
+  .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid #DDDDED; }
+  .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+
+  .result-card { background: var(--orange-light); border: 1.5px solid var(--orange-border);
+    border-radius: var(--radius); padding: 24px; margin-top: 32px; display: none; }
+  .result-card.show { display: block; }
+  .result-card h3 { font-size: 16px; font-weight: 700; color: var(--orange); margin-bottom: 16px; }
+  .result-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-start; }
+  .result-label { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    white-space: nowrap; flex-shrink: 0; }
+  .result-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  @media (max-width: 600px) {
+    .sec-header { flex-direction: column; }
+    .btn { width: 100%; justify-content: center; }
+    .actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">📋 한나전 워크시트</div>
+    <h1>기획안 작성 템플릿</h1>
+    <p>내 전자책의 방향을 잡는 4가지 질문에 답해보세요.<br>완성하면 기획안 초안이 자동으로 만들어져요.</p>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- WHAT -->
+  <div class="section what">
+    <div class="sec-header">
+      <div class="badge-letter">W</div>
+      <div class="sec-title">
+        <h2>WHAT — 무엇을 쓸 건가요?</h2>
+        <p>내 전자책의 핵심 주제와 담고 싶은 내용은 무엇인가요?</p>
+      </div>
+    </div>
+    <textarea id="what" rows="5" placeholder="예) 직장을 다니면서 경험한 것들을 전자책으로 만들어 수익화하는 방법. 내가 실제로 해본 전자책 기획, 제작, 판매까지의 과정을 솔직하게 담을 거예요." oninput="updateProgress(); updateCount('what', 'whatCount')"></textarea>
+    <div class="char-count"><span id="whatCount">0</span>자</div>
+    <div class="tip"><strong>💡 Tip.</strong> '내가 경험한 것' + '독자에게 도움이 되는 것'이 겹치는 지점을 찾아보세요.</div>
+  </div>
+
+  <!-- WHY -->
+  <div class="section why">
+    <div class="sec-header">
+      <div class="badge-letter">W</div>
+      <div class="sec-title">
+        <h2>WHY — 왜 내가 써야 하나요?</h2>
+        <p>이 주제를 당신만이 쓸 수 있는 이유는 무엇인가요?</p>
+      </div>
+    </div>
+    <textarea id="why" rows="5" placeholder="예) 나는 실제로 해봤고, 실패도 했으며, 그 과정을 모두 기록했어요. 이론이 아닌 생생한 현장 경험을 담을 수 있기 때문이에요." oninput="updateProgress(); updateCount('why', 'whyCount')"></textarea>
+    <div class="char-count"><span id="whyCount">0</span>자</div>
+    <div class="tip"><strong>💡 Tip.</strong> '내가 직접 경험했다', '나만 아는 노하우가 있다', '나와 같은 상황인 사람이 많다' — 이 중 하나만 해당해도 충분해요.</div>
+  </div>
+
+  <!-- WHO -->
+  <div class="section who">
+    <div class="sec-header">
+      <div class="badge-letter">W</div>
+      <div class="sec-title">
+        <h2>WHO — 누구를 위해 쓰나요?</h2>
+        <p>이 책의 이상적인 독자는 누구인가요? 그들의 상황과 고민은?</p>
+      </div>
+    </div>
+    <textarea id="who" rows="5" placeholder="예) 회사 밖에서 자신의 지식을 수익화하고 싶지만 어디서부터 시작해야 할지 모르는 직장인. 특히 30~40대, 전문 지식이 있지만 글쓰기에 자신이 없는 분들." oninput="updateProgress(); updateCount('who', 'whoCount')"></textarea>
+    <div class="char-count"><span id="whoCount">0</span>자</div>
+    <div class="tip"><strong>💡 Tip.</strong> '내 과거의 나' 혹은 '지금 나에게 조언을 구하는 사람'을 떠올려보세요. 그 사람이 바로 독자예요.</div>
+  </div>
+
+  <!-- HOW -->
+  <div class="section how">
+    <div class="sec-header">
+      <div class="badge-letter">H</div>
+      <div class="sec-title">
+        <h2>HOW — 어떻게 전달할 건가요?</h2>
+        <p>어떤 방식으로 내용을 구성하고 전달할 계획인가요?</p>
+      </div>
+    </div>
+    <textarea id="how" rows="5" placeholder="예) 실패 스토리 → 깨달음의 순간 → 실전 방법 3단계 → 독자 실행 가이드 순서로 구성. 딱딱한 설명보다는 내 이야기를 통해 자연스럽게 방법을 전달하고 싶어요." oninput="updateProgress(); updateCount('how', 'howCount')"></textarea>
+    <div class="char-count"><span id="howCount">0</span>자</div>
+    <div class="tip"><strong>💡 Tip.</strong> 노하우형, 스토리형, 워크북형, 가이드형 — 어떤 스타일로 읽히길 원하는지 생각해보세요.</div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-outline" onclick="resetAll()">🔄 다시 작성하기</button>
+    <button class="btn btn-primary" onclick="showResult()">📋 기획안 초안 완성하기</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <h3>🎉 내 전자책 기획안 초안</h3>
+    <div id="resultContent"></div>
+    <div style="margin-top: 20px; text-align: center;">
+      <button class="btn btn-outline" onclick="copyResult()" style="font-size:13px; padding:10px 20px;">📋 복사하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updateCount(id, countId) {
+    const el = document.getElementById(id);
+    const count = document.getElementById(countId);
+    if (el && count) count.textContent = el.value.length;
+  }
+  function updateProgress() {
+    const ids = ['what', 'why', 'who', 'how'];
+    const filled = ids.filter(id => document.getElementById(id).value.trim().length > 10).length;
+    document.getElementById('progressFill').style.width = (filled / ids.length * 100) + '%';
+  }
+  function showResult() {
+    const what = document.getElementById('what').value.trim();
+    const why  = document.getElementById('why').value.trim();
+    const who  = document.getElementById('who').value.trim();
+    const how  = document.getElementById('how').value.trim();
+    if (!what && !why && !who && !how) {
+      alert('최소 한 항목 이상 작성해주세요 😊');
+      return;
+    }
+    const labels = [
+      { key: 'WHAT', color: '#FF6B2B', bg: '#FFF3EE', val: what },
+      { key: 'WHY',  color: '#4A90D9', bg: '#EDF5FF', val: why  },
+      { key: 'WHO',  color: '#27AE60', bg: '#EDFAF3', val: who  },
+      { key: 'HOW',  color: '#9B59B6', bg: '#F6EFFE', val: how  },
+    ];
+    const html = labels.map(l => l.val ? `
+      <div class="result-row">
+        <span class="result-label" style="background:${l.bg};color:${l.color}">${l.key}</span>
+        <span class="result-text">${l.val.replace(/\n/g, '<br>')}</span>
+      </div>` : '').join('');
+    document.getElementById('resultContent').innerHTML = html;
+    const card = document.getElementById('resultCard');
+    card.classList.add('show');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function copyResult() {
+    const ids = ['what', 'why', 'who', 'how'];
+    const labels = ['WHAT', 'WHY', 'WHO', 'HOW'];
+    const text = ids.map((id, i) => {
+      const val = document.getElementById(id).value.trim();
+      return val ? `[${labels[i]}]\n${val}` : '';
+    }).filter(Boolean).join('\n\n');
+    navigator.clipboard.writeText(text).then(() => alert('복사되었어요! ✅'));
+  }
+  function resetAll() {
+    if (confirm('작성한 내용을 지우고 다시 시작할까요?')) {
+      ['what','why','who','how'].forEach(id => document.getElementById(id).value = '');
+      ['whatCount','whyCount','whoCount','howCount'].forEach(id => document.getElementById(id).textContent = '0');
+      document.getElementById('resultCard').classList.remove('show');
+      document.getElementById('progressFill').style.width = '0%';
+    }
+  }
+</script>
+</body>
+</html>

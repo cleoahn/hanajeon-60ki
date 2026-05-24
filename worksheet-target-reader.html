@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>타겟 독자 분석 워크시트 — 한나전</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #FF6B2B; --orange-light: #FFF3EE; --orange-border: #FFD4C0;
+    --blue: #4A90D9; --blue-light: #EDF5FF; --blue-border: #B3D4F5;
+    --green: #27AE60; --green-light: #EDFAF3; --green-border: #A8E6C3;
+    --purple: #9B59B6; --purple-light: #F6EFFE; --purple-border: #D7B8F2;
+    --ink: #1A1A2E; --ink-2: #3D3D5C; --muted: #8888AA;
+    --bg: #FAFAFA; --card: #FFFFFF; --radius: 14px;
+  }
+  body { font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: var(--bg); color: var(--ink); min-height: 100vh; padding: 40px 20px 80px; }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .header { text-align: center; margin-bottom: 40px; }
+  .badge { display: inline-block; background: var(--blue); color: #fff;
+    font-size: 12px; font-weight: 700; letter-spacing: .5px;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; }
+  .header h1 { font-size: 26px; font-weight: 800; line-height: 1.35; margin-bottom: 10px; }
+  .header p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  .progress-bar { background: #EAEAF0; border-radius: 99px; height: 6px; margin-bottom: 40px; }
+  .progress-fill { height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--blue), #74B3F0); transition: width .4s ease; width: 0%; }
+
+  .section { background: var(--card); border: 1.5px solid #EAEAF0;
+    border-radius: var(--radius); padding: 28px; margin-bottom: 20px;
+    transition: box-shadow .2s; }
+  .section:hover { box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+
+  .sec-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .sec-icon { width: 36px; height: 36px; border-radius: 10px; font-size: 18px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .sec-title h2 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .sec-title p  { font-size: 13px; color: var(--muted); }
+
+  .field { margin-bottom: 18px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-2);
+    margin-bottom: 7px; }
+  input[type="text"], textarea {
+    width: 100%; padding: 12px 14px; border: 1.5px solid #EAEAF0;
+    border-radius: 10px; font-family: inherit; font-size: 14px; color: var(--ink);
+    background: var(--bg); outline: none; transition: border-color .2s, background .2s;
+    line-height: 1.6;
+  }
+  textarea { resize: vertical; min-height: 90px; }
+  input::placeholder, textarea::placeholder { color: #B0B0CC; }
+  input:focus, textarea:focus { border-color: var(--blue); background: #fff; }
+
+  .pain-list { list-style: none; }
+  .pain-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .pain-list li span { flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--blue);
+    background: var(--blue-light); padding: 3px 9px; border-radius: 20px; margin-top: 3px; }
+  .pain-list li input { flex: 1; }
+
+  .tip { background: var(--blue-light); border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0; padding: 12px 16px; margin-top: 14px;
+    font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+  .tip strong { color: var(--blue); }
+
+  .actions { display: flex; gap: 12px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+  .btn { padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 700;
+    cursor: pointer; border: none; transition: all .2s; }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: #3070B8; transform: translateY(-1px); }
+  .btn-outline { background: #fff; color: var(--ink); border: 1.5px solid #DDDDED; }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+
+  .result-card { background: var(--blue-light); border: 1.5px solid var(--blue-border);
+    border-radius: var(--radius); padding: 24px; margin-top: 32px; display: none; }
+  .result-card.show { display: block; }
+  .result-card h3 { font-size: 16px; font-weight: 700; color: var(--blue); margin-bottom: 16px; }
+  .result-row { margin-bottom: 12px; }
+  .result-label { font-size: 12px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+  .result-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+
+  .persona-tag { display: inline-block; background: var(--orange-light); color: var(--orange);
+    font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin: 2px; }
+
+  @media (max-width: 600px) {
+    .btn { width: 100%; }
+    .actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">👤 한나전 워크시트</div>
+    <h1>타겟 독자 분석 워크시트</h1>
+    <p>내 책을 읽을 독자를 구체적으로 그려보세요.<br>독자가 선명할수록 책의 방향이 잡혀요.</p>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- 1. 기본 프로필 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#FFF3EE;">👤</div>
+      <div class="sec-title">
+        <h2>1. 독자 기본 프로필</h2>
+        <p>내 책을 읽을 사람을 한 명 떠올려보세요</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>이 독자를 한 문장으로 표현한다면?</label>
+      <input type="text" id="persona" placeholder="예) 퇴근 후 나만의 무언가를 만들고 싶은 30대 직장인" oninput="updateProgress()">
+    </div>
+    <div class="field">
+      <label>연령대 / 직업 / 상황</label>
+      <input type="text" id="profile" placeholder="예) 30~40대, 직장인, 육아 중, 부업을 찾고 있음" oninput="updateProgress()">
+    </div>
+    <div class="tip"><strong>💡 Tip.</strong> '내 과거의 나' 혹은 '지금 나에게 조언을 구하는 지인'을 떠올려보세요. 그 사람이 최고의 독자예요.</div>
+  </div>
+
+  <!-- 2. 고민과 욕구 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#EDF5FF;">😟</div>
+      <div class="sec-title">
+        <h2>2. 독자의 고민 & 욕구</h2>
+        <p>이 독자는 어떤 문제를 갖고 있나요?</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>📌 가장 큰 고민 3가지</label>
+      <ul class="pain-list">
+        <li><span>#1</span><input type="text" id="pain1" placeholder="예) 글을 어디서부터 시작해야 할지 모르겠다" oninput="updateProgress()"></li>
+        <li><span>#2</span><input type="text" id="pain2" placeholder="예) 내 경험이 책이 될 만큼 특별한지 모르겠다" oninput="updateProgress()"></li>
+        <li><span>#3</span><input type="text" id="pain3" placeholder="예) 만들어도 팔릴지 걱정된다" oninput="updateProgress()"></li>
+      </ul>
+    </div>
+    <div class="field" style="margin-top: 18px;">
+      <label>🌟 이 독자가 진짜 원하는 것은?</label>
+      <textarea id="desire" placeholder="예) 내 지식을 정리하고 수익화해서 회사 밖에서도 인정받고 싶다. 퇴근 후에도 뭔가 하고 있다는 성취감을 느끼고 싶다." oninput="updateProgress()"></textarea>
+    </div>
+    <div class="tip"><strong>💡 Tip.</strong> 고민은 표면적인 것(글 못 씀)이 아니라 그 안에 있는 진짜 감정(인정받고 싶음, 두려움)까지 생각해보세요.</div>
+  </div>
+
+  <!-- 3. 내 책이 주는 변화 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#EDFAF3;">✨</div>
+      <div class="sec-title">
+        <h2>3. 내 책이 만드는 변화</h2>
+        <p>이 책을 읽은 후 독자의 삶은 어떻게 달라지나요?</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>책을 읽기 전 독자의 상태</label>
+      <textarea id="before" rows="3" placeholder="예) '내가 쓴다고 누가 사겠어?' 라는 생각에 시작도 못하고 있다" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="field">
+      <label>책을 읽고 난 후 독자의 상태</label>
+      <textarea id="after" rows="3" placeholder="예) 내 경험을 체계적으로 정리해서 한 달 안에 전자책 첫 판매를 경험한다" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="tip"><strong>💡 Tip.</strong> Before → After의 차이가 클수록 독자에게 매력적인 책이 돼요.</div>
+  </div>
+
+  <!-- 4. 독자가 선택할 이유 -->
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#F6EFFE;">💬</div>
+      <div class="sec-title">
+        <h2>4. 독자가 내 책을 선택할 이유</h2>
+        <p>비슷한 책 중에서 왜 내 책을 골라야 할까요?</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>내 책만의 차별점 (1~3가지)</label>
+      <textarea id="diff" rows="4" placeholder="예) 1) 이론이 아닌 실제 경험 기반&#10;2) 코딩이나 전문 지식 없이도 따라 할 수 있음&#10;3) 한 달 안에 완성하는 구체적인 일정 제공" oninput="updateProgress()"></textarea>
+    </div>
+    <div class="field">
+      <label>독자가 나에 대해 어떻게 생각하길 바라나요?</label>
+      <input type="text" id="reputation" placeholder="예) '나도 저 사람처럼 할 수 있겠다'는 동질감과 신뢰감" oninput="updateProgress()">
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-outline" onclick="resetAll()">🔄 다시 작성하기</button>
+    <button class="btn btn-primary" onclick="showResult()">👤 독자 프로필 완성하기</button>
+  </div>
+
+  <div class="result-card" id="resultCard">
+    <h3>🎯 내 타겟 독자 프로필</h3>
+    <div id="resultContent"></div>
+    <div style="margin-top: 20px; text-align: center;">
+      <button class="btn btn-outline" onclick="copyResult()" style="font-size:13px; padding:10px 20px;">📋 복사하기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const FIELDS = ['persona','profile','pain1','pain2','pain3','desire','before','after','diff','reputation'];
+  function updateProgress() {
+    const filled = FIELDS.filter(id => document.getElementById(id)?.value.trim().length > 5).length;
+    document.getElementById('progressFill').style.width = (filled / FIELDS.length * 100) + '%';
+  }
+  function showResult() {
+    const vals = Object.fromEntries(FIELDS.map(id => [id, document.getElementById(id)?.value.trim() || '']));
+    if (FIELDS.every(id => !vals[id])) { alert('최소 한 항목 이상 작성해주세요 😊'); return; }
+    const rows = [
+      { label: '독자 한 줄 정의', val: vals.persona },
+      { label: '연령대/직업/상황', val: vals.profile },
+      { label: '주요 고민', val: [vals.pain1, vals.pain2, vals.pain3].filter(Boolean).join(' / ') },
+      { label: '진짜 원하는 것', val: vals.desire },
+      { label: '책 읽기 전', val: vals.before },
+      { label: '책 읽은 후', val: vals.after },
+      { label: '차별점', val: vals.diff },
+      { label: '독자가 나를 보는 시선', val: vals.reputation },
+    ].filter(r => r.val);
+    document.getElementById('resultContent').innerHTML = rows.map(r => `
+      <div class="result-row">
+        <div class="result-label">📌 ${r.label}</div>
+        <div class="result-text">${r.val.replace(/\n/g,'<br>')}</div>
+      </div>`).join('');
+    const card = document.getElementById('resultCard');
+    card.classList.add('show');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function copyResult() {
+    const fields = {
+      '독자 정의': 'persona', '프로필': 'profile',
+      '고민 1': 'pain1', '고민 2': 'pain2', '고민 3': 'pain3',
+      '욕구': 'desire', '이전': 'before', '이후': 'after',
+      '차별점': 'diff', '인식': 'reputation'
+    };
+    const text = Object.entries(fields).map(([label, id]) => {
+      const val = document.getElementById(id)?.value.trim();
+      return val ? `[${label}]\n${val}` : '';
+    }).filter(Boolean).join('\n\n');
+    navigator.clipboard.writeText(text).then(() => alert('복사되었어요! ✅'));
+  }
+  function resetAll() {
+    if (confirm('작성한 내용을 지우고 다시 시작할까요?')) {
+      FIELDS.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+      document.getElementById('resultCard').classList.remove('show');
+      document.getElementById('progressFill').style.width = '0%';
+    }
+  }
+</script>
+</body>
+</html>
