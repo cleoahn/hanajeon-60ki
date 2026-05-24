@@ -264,7 +264,7 @@ const CONFIG = {
     { category: "워크시트", name: "타겟 독자 분석 워크시트", url: "./worksheet-target-reader.html" },
     { category: "워크시트", name: "초고 완성 체크리스트", url: "./checklist-draft.html" },
     { category: "워크시트", name: "Story Asset Lab 사용 안내", url: "https://naver.me/xk9tJHfw" },
-    { category: "가이드", name: "전문가 작성소개 가이드", url: "https://naver.me/5yhWp7gy" },
+    { category: "가이드", name: "전문가 작성소개 가이드", url: "https://naver.me/xm0BWaYI" },
     { category: "가이드", name: "캔바 표지 제작 가이드", url: "https://naver.me/FQuy1tt1" },
     { category: "가이드", name: "전자책 표지 만들기_샘플 자료", url: "https://naver.me/5FDENWBh" },
     { category: "가이드", name: "AI로 제목 뽑을 때 효과적인 프롬프트 작성하기", url: "https://naver.me/xIF1N6r8" },
