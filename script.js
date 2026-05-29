@@ -882,16 +882,22 @@ function renderSubmit() {
 // ═══ ⑥ 작업 현황판 (구글 시트 자동 연동) ═══
 
 // 구글 시트에서 받은 CSV 텍스트를 [{name, status}, ...] 배열로 바꿔줍니다.
-// 첫 줄(닉네임/단계 머리글)은 건너뛰고, 열 위치로 읽으므로 머리글 이름이 조금 달라도 동작합니다.
+// 빈 줄과 제목 줄(명단/닉네임 등)은 자동으로 걸러내므로,
+// 시트에 머리글이 있든 없든·빈 줄이 끼어 있든 안전하게 동작합니다.
 function parseStatusCSV(text) {
-  const lines = text.trim().split(/\r?\n/); // 줄 단위로 나누기 (\r 제거)
-  lines.shift();                            // 첫 줄(머리글) 버리기
-  return lines
+  // 첫 칸이 이 단어들 중 하나면 "제목 줄"로 보고 건너뜁니다.
+  const HEADER_WORDS = ['명단', '닉네임', '이름', '성함'];
+  return text
+    .split(/\r?\n/)                          // 줄 단위로 나누기 (\r 제거)
     .map(line => {
       const cols = line.split(',');
       return { name: (cols[0] || '').trim(), status: (cols[1] || '').trim() };
     })
-    .filter(s => s.name);                    // 닉네임이 빈 행은 제외
+    .filter(s => {
+      if (!s.name) return false;                       // 빈 줄 제외
+      if (HEADER_WORDS.includes(s.name)) return false; // 제목 줄 제외
+      return true;                                     // 진짜 명단만 남김
+    });
 }
 
 // 받은 명단 배열로 현황판 화면을 그립니다.
