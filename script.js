@@ -263,16 +263,17 @@ const CONFIG = {
     { category: "워크시트", name: "기획안 작성 템플릿", url: "./worksheet-plan.html" },
     { category: "워크시트", name: "타겟 독자 분석 워크시트", url: "./worksheet-target-reader.html" },
     { category: "워크시트", name: "초고 완성 체크리스트", url: "./checklist-draft.html" },
-    { category: "워크시트", name: "Story Asset Lab 사용 안내", url: "https://naver.me/xk9tJHfw" },
-    { category: "가이드", name: "전문가 작성소개 가이드", url: "https://naver.me/xm0BWaYI" },
+    { category: "워크시트", name: "전자책 목차 설계 양식", url: "" },
+    { category: "가이드", name: "전문가 작성소개 가이드", url: "https://naver.me/GO6hnTEw" },
     { category: "가이드", name: "캔바 표지 제작 가이드", url: "https://naver.me/FQuy1tt1" },
     { category: "가이드", name: "전자책 표지 만들기_샘플 자료", url: "https://naver.me/5FDENWBh" },
     { category: "가이드", name: "AI로 제목 뽑을 때 효과적인 프롬프트 작성하기", url: "https://naver.me/xIF1N6r8" },
-    { category: "가이드", name: "PDF 변환 방법 총정리", url: "https://naver.me/xM5nep9x" },
+    { category: "가이드", name: "크몽 등록 완벽 가이드", url: "" },
+    { category: "가이드", name: "PDF 변환 방법 총정리", url: "" },
     { category: "예시", name: "전문가 소개하기", url: "https://naver.me/xjYUbTCz" },
     { category: "예시", name: "전자책 제목 예시 모음", url: "https://naver.me/xuFmS15U" },
-    { category: "예시", name: "목차정하기 막막하다면 Story Asset Lab을 활용하세요.", url: "https://naver.me/FfsByjlB" },
-    { category: "예시", name: "크몽 상세페이지 작성 예시", url: "https://naver.me/Gqf9jGV6" }
+    { category: "예시", name: "Story Asset Lab 사용 안내", url: "https://naver.me/FfsByjlB" },
+    { category: "예시", name: "크몽 상세페이지 작성 예시", url: "" }
   ],
 
   // ⑥ 스페셜 미션 (5차 완료 후, 6차 전)
@@ -300,17 +301,10 @@ const CONFIG = {
     }
   ],
 
-  // ⑦ 작업 현황판
-  statusBoard: [
-    { name: "이영희", status: "1차 시작" },
-    { name: "너구리", status: "1차 완료" },
-    { name: "장미영", status: "1차 시작" },
-    { name: "최희경", status: "1차 시작" },
-    { name: "조용한관찰자", status: "대기" },
-    { name: "매일조금씩", status: "대기" },
-    { name: "드디어나도", status: "대기" },
-    { name: "처음해보는", status: "대기" }
-  ]
+  // ⑦ 작업 현황판 — 명단은 구글 시트에서 자동으로 불러옵니다.
+  //    👉 명단을 고칠 때는 코드가 아니라 "원본 구글 시트"에서 수정하세요.
+  //       (시트만 고치면 사이트에 자동 반영돼요. 코드는 건드릴 필요 없어요!)
+  statusSheetUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTkgPOJEBCQ04B4fkx8wq3r5E7V1RSXLNzKbQC3w5_NlvzfbvBZIUfJwxfFpaP7SGg6pVjtvTLwMmxN/pub?gid=0&single=true&output=csv"
 };
 
 // ============================================================
@@ -885,9 +879,24 @@ function renderSubmit() {
   document.getElementById('page-submit').innerHTML = html;
 }
 
-// ═══ ⑥ 작업 현황판 ═══
-function renderStatus() {
-  const rows = CONFIG.statusBoard.map((s, i) => {
+// ═══ ⑥ 작업 현황판 (구글 시트 자동 연동) ═══
+
+// 구글 시트에서 받은 CSV 텍스트를 [{name, status}, ...] 배열로 바꿔줍니다.
+// 첫 줄(닉네임/단계 머리글)은 건너뛰고, 열 위치로 읽으므로 머리글 이름이 조금 달라도 동작합니다.
+function parseStatusCSV(text) {
+  const lines = text.trim().split(/\r?\n/); // 줄 단위로 나누기 (\r 제거)
+  lines.shift();                            // 첫 줄(머리글) 버리기
+  return lines
+    .map(line => {
+      const cols = line.split(',');
+      return { name: (cols[0] || '').trim(), status: (cols[1] || '').trim() };
+    })
+    .filter(s => s.name);                    // 닉네임이 빈 행은 제외
+}
+
+// 받은 명단 배열로 현황판 화면을 그립니다.
+function buildStatusHTML(board) {
+  const rows = board.map((s, i) => {
     const color = getStatusColor(s.status);
     return `<tr class="${i%2===0?'row-even':'row-odd'}">
       <td class="status-rank">${i+1}</td>
@@ -898,7 +907,7 @@ function renderStatus() {
     </tr>`;
   }).join('');
   const counts = {};
-  CONFIG.statusBoard.forEach(s => { counts[s.status] = (counts[s.status]||0)+1; });
+  board.forEach(s => { counts[s.status] = (counts[s.status]||0)+1; });
   const summary = Object.entries(counts).map(([status, count]) => {
     const color = getStatusColor(status);
     return `<div class="status-summary-item">
@@ -906,7 +915,7 @@ function renderStatus() {
       <span class="status-count">${count}명</span>
     </div>`;
   }).join('');
-  const html = `
+  return `
     <div class="page-inner">
       <div class="page-header">
         <h1 class="page-title">📊 작업 현황판</h1>
@@ -915,7 +924,7 @@ function renderStatus() {
       <div class="status-summary">
         <div class="status-summary-title">단계별 현황</div>${summary}
       </div>
-      <div class="status-total">총 ${CONFIG.statusBoard.length}명 참여 중</div>
+      <div class="status-total">총 ${board.length}명 참여 중</div>
       <div class="table-wrap">
         <table class="status-table">
           <thead><tr><th>#</th><th>닉네임</th><th>현재 단계</th></tr></thead>
@@ -928,7 +937,45 @@ function renderStatus() {
         <button class="btn btn-orange" onclick="goToMissionCert()">📸 미션인증하러 가기</button>
       </div>
     </div>`;
-  document.getElementById('page-status').innerHTML = html;
+}
+
+async function renderStatus() {
+  const page = document.getElementById('page-status');
+
+  // 1) 먼저 "불러오는 중" 화면을 보여줍니다.
+  page.innerHTML = `
+    <div class="page-inner">
+      <div class="page-header">
+        <h1 class="page-title">📊 작업 현황판</h1>
+        <p class="page-desc">우리 ${CONFIG.cohortName} 수강생들의 진행 현황이에요.</p>
+      </div>
+      <div class="status-total">명단을 불러오는 중이에요…</div>
+    </div>`;
+
+  // 2) 구글 시트에서 최신 명단을 가져옵니다.
+  try {
+    const res = await fetch(CONFIG.statusSheetUrl);
+    if (!res.ok) throw new Error('시트 응답 오류 ' + res.status);
+    const text = await res.text();
+    const board = parseStatusCSV(text);
+    if (board.length === 0) throw new Error('명단이 비어 있어요');
+    // 3) 받은 명단으로 화면을 그립니다.
+    page.innerHTML = buildStatusHTML(board);
+  } catch (e) {
+    // 실패하면 안내 + 다시 불러오기 버튼
+    page.innerHTML = `
+      <div class="page-inner">
+        <div class="page-header">
+          <h1 class="page-title">📊 작업 현황판</h1>
+        </div>
+        <div class="status-note">
+          <p>😢 현황판을 불러오지 못했어요.</p>
+          <p>인터넷 연결을 확인하고 잠시 후 다시 시도해 주세요.</p>
+          <button class="btn btn-orange" onclick="renderStatus()">🔄 다시 불러오기</button>
+        </div>
+      </div>`;
+    console.error('현황판 불러오기 실패:', e);
+  }
 }
 
 // ═══ ⑦ 자료실 ═══
