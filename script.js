@@ -7,9 +7,9 @@ const CONFIG = {
   cohortName: "60기",
   siteName: "한나전 온라인 작업실",
   currentSession: 2,
-  orientationDate: "2025.05.30",
-  phase1End: "2025.06.25",
-  phase2End: "2025.07.10",
+  orientationDate: "2026.05.30",
+  phase1End: "2026.06.25",
+  phase2End: "2026.07.10",
 
   // ② 링크 모음 — 여기서만 수정하세요
   naverCafeUrl:     "https://cafe.naver.com/f-e/cafes/29878308/menus/154",        // 미션 인증 게시판
@@ -21,14 +21,14 @@ const CONFIG = {
   notices: [
     {
       id: 1,
-      date: "2025.05.23",
+      date: "2026.05.23",
       title: "🎉 한나전 60기 온라인 작업실 오픈!",
       content: "안녕하세요, 한나전 60기 여러분!\n\n드디어 온라인 작업실이 열렸어요.\n이곳에서 미션을 확인하고, 강의 자료를 찾고, 인증을 올릴 수 있어요.\n\n왼쪽 메뉴에서 '시작 안내'를 먼저 읽어주세요.\n궁금한 점은 공지사항을 먼저 확인하고,\n그래도 모르겠다면 네이버 카페에서 질문해주세요!",
       important: true
     },
     {
       id: 2,
-      date: "2025.05.23",
+      date: "2026.05.23",
       title: "📌 오리엔테이션 안내 (5/30 토요일 저녁 8시, 줌)",
       content: "오리엔테이션 일정을 안내드려요.\n\n📅 날짜: 2025년 5월 30일 (토)\n⏰ 시간: 저녁 8시\n💻 방식: 줌(Zoom)\n🔗 줌 링크: https://us06web.zoom.us/j/88143079453?pwd=t2XjhyOAfJ7ZeMMvnhQ2MsmKTbUx1j.1\n\n참석하지 못하시는 분은 녹화본을 제공해드려요.\n녹화본은 OT 이후 공지사항에서 확인하세요.",
       important: true
