@@ -633,7 +633,7 @@ function renderGuide() {
         </div>
       </div>
       <div class="guide-cta">
-        <p>준비됐나요? 1차 미션으로 바로 가볼게요!</p>
+        <p>준비됐나요? 이번 미션 하러 가볼게요!</p>
         <button class="btn btn-orange" onclick="goToLecture(${CONFIG.currentSession})">${CONFIG.currentSession}차 미션 보러 가기 →</button>
       </div>
     </div>`;
