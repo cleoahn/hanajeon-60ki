@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="한나전 온라인 작업실 — 함께 완성하는 전자책 제작실">
+  <title>한나전 온라인 작업실</title>
+
+  <!-- Google Fonts (한국어) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════
+       헤더 & 네비게이션
+  ══════════════════════════════════ -->
+  <header id="header">
+    <div class="header-inner">
+      <div class="logo" onclick="navigate('home')" role="button" aria-label="홈으로">
+        <span class="logo-badge">60기</span>
+        <span class="logo-text">한나전 온라인 작업실</span>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="메뉴 열기/닫기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <nav id="mainNav" role="navigation" aria-label="주 메뉴">
+      <a class="nav-link active" data-page="home"      role="button">🏠 홈</a>
+      <a class="nav-link"        data-page="guide"     role="button">📖 시작 안내</a>
+      <a class="nav-link"        data-page="lectures"  role="button">📚 차수별 미션</a>
+      <a class="nav-link"        data-page="submit"    role="button">📸 미션 인증</a>
+      <a class="nav-link"        data-page="status"    role="button">📊 작업 현황판</a>
+      <a class="nav-link"        data-page="resources" role="button">📁 자료실</a>
+      <a class="nav-link"        data-page="notices"   role="button">📢 공지사항</a>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════
+       메인 — 각 페이지는 JS가 렌더링합니다
+  ══════════════════════════════════ -->
+  <main id="main">
+    <section id="page-home"      class="page active" aria-label="홈 대시보드"></section>
+    <section id="page-guide"     class="page"        aria-label="시작 안내"></section>
+    <section id="page-lectures"  class="page"        aria-label="주차별 강의실"></section>
+    <section id="page-mission"   class="page"        aria-label="오늘의 미션"></section>
+    <section id="page-submit"    class="page"        aria-label="과제 제출"></section>
+    <section id="page-status"    class="page"        aria-label="작업 현황판"></section>
+    <section id="page-resources" class="page"        aria-label="자료실"></section>
+    <section id="page-notices"   class="page"        aria-label="공지사항"></section>
+  </main>
+
+  <!-- 오버레이 패널 (워크시트 / 체크리스트) -->
+  <div id="overlayPanel" class="overlay-panel">
+    <div class="overlay-topbar">
+      <button class="overlay-close-btn" onclick="closeOverlay()">✕ 닫기</button>
+    </div>
+    <div id="overlayContent"></div>
+  </div>
+
+  <!-- 스크립트 -->
+  <script src="script.js"></script>
+</body>
+</html>

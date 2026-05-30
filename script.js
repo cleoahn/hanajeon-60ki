@@ -511,7 +511,7 @@ function renderDashboard() {
       ${buildProgressBar(CONFIG.currentSession)}
       <div class="dashboard-grid">
         <div class="card card-week">
-          <div class="card-label">📅 이번 미션</div>
+          <div class="card-label">📅 이번 차수</div>
           <div class="card-week-num">${s.session}차${phase2badge}</div>
           <div class="card-week-emoji">${s.emoji}</div>
           <div class="card-week-title">${s.title}</div>
@@ -519,7 +519,7 @@ function renderDashboard() {
           <button class="btn btn-full" onclick="goToLecture(${s.session})">이번 미션 강의 보러 가기 →</button>
         </div>
         <div class="card card-mission">
-          <div class="card-label">✅ 오늘의 미션</div>
+          <div class="card-label">✅ 이번 차수 미션</div>
           <div class="mission-goal">"${s.goal}"</div>
           <div class="mission-list-wrap">${buildMissionList(s.missions)}</div>
           <button class="btn btn-orange btn-full" onclick="goToMissionCert()">📸 미션인증하러 가기</button>
@@ -535,7 +535,6 @@ function renderDashboard() {
         <div class="quick-menu-title">바로가기</div>
         <div class="quick-grid">
           <button class="quick-btn" onclick="navigate('lectures')">📚<span>차수별 미션</span></button>
-          <button class="quick-btn" onclick="navigate('mission')">✅<span>오늘의 미션</span></button>
           <button class="quick-btn" onclick="navigate('status')">📊<span>작업 현황판</span></button>
           <button class="quick-btn" onclick="navigate('resources')">📁<span>자료실</span></button>
           <button class="quick-btn" onclick="navigate('notices')">📢<span>공지사항</span></button>
@@ -612,7 +611,7 @@ function renderGuide() {
           <div class="guide-step-num">2</div>
           <div class="guide-step-body">
             <div class="guide-step-title">차수별 미션에서 강의 내용 확인</div>
-            <div class="guide-step-desc">메뉴 '차수별 미션' → 해당 차수 탭 클릭 → 미션 내용 확인.<br>
+            <div class="guide-step-desc">메뉴 '차수별 미션'에 들어가면 <strong style="color:#FF6B2B;">지금 진행 차수가 자동으로 열려요.</strong> 순서대로 진행하면 됩니다.<br>
             강의 영상은 <a href="${CONFIG.naverMissionUrl}" target="_blank" style="color:#FF6B2C;font-weight:700;">네이버 카페 미션 공지사항</a>에서 확인해요.<br>
             영상이 없는 경우에도 카페 미션 공지사항을 먼저 확인해주세요.</div>
           </div>
@@ -620,20 +619,13 @@ function renderGuide() {
         <div class="guide-step">
           <div class="guide-step-num">3</div>
           <div class="guide-step-body">
-            <div class="guide-step-title">오늘의 미션 확인하기</div>
-            <div class="guide-step-desc">홈 화면에서 이번 차수 해야 할 미션을 확인해요.</div>
-          </div>
-        </div>
-        <div class="guide-step">
-          <div class="guide-step-num">4</div>
-          <div class="guide-step-body">
-            <div class="guide-step-title">미션인증하러 가기</div>
-            <div class="guide-step-desc">미션 완료 후 '미션인증하러 가기' 버튼 클릭 → 네이버 카페 게시판에 인증글 작성.<br>
+            <div class="guide-step-title">미션 완료 후 인증하기</div>
+            <div class="guide-step-desc">미션을 마쳤다면 해당 차수의 '미션인증하러 가기' 버튼 클릭 → 네이버 카페 게시판에 인증글 작성.<br>
             인증해야 현황판 단계가 업데이트돼요.</div>
           </div>
         </div>
         <div class="guide-step">
-          <div class="guide-step-num">5</div>
+          <div class="guide-step-num">4</div>
           <div class="guide-step-body">
             <div class="guide-step-title">작업 현황판 확인하기</div>
             <div class="guide-step-desc">다른 수강생들이 어디까지 왔는지 볼 수 있어요. 나만 느린 게 아니에요.</div>
@@ -652,6 +644,15 @@ function renderGuide() {
 function renderLectures(sessionNum) {
   currentSession = sessionNum;
   const s = CONFIG.sessions[sessionNum - 1];
+  const __cur = CONFIG.currentSession;
+  let paceBanner = '';
+  if (sessionNum === __cur) {
+    paceBanner = `<div style="background:#FFF3EE;border:1.5px solid #FFD4C0;border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:13.5px;color:#3D3D5C;line-height:1.6;">📍 <strong style="color:#FF6B2B;">지금 ${CONFIG.cohortName}가 함께 진행 중인 차수예요.</strong> 여기부터 순서대로 진행해 주세요.</div>`;
+  } else if (sessionNum < __cur) {
+    paceBanner = `<div style="background:#F4F4F8;border:1.5px solid #E3E3EC;border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:13.5px;color:#6B6B85;line-height:1.6;">✅ 지난 차수예요. 현재 진행 차수는 <strong style="color:#FF6B2B;">${__cur}차</strong>입니다. 복습하거나 놓친 미션을 채워보세요.</div>`;
+  } else {
+    paceBanner = `<div style="background:#EDF5FF;border:1.5px solid #B3D4F5;border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:13.5px;color:#3D3D5C;line-height:1.6;">⏩ 아직 진행 전 차수예요. 현재 진행 차수는 <strong style="color:#FF6B2B;">${__cur}차</strong>입니다. 미리 살펴보는 건 좋지만, 순서대로 진행하길 권해요.</div>`;
+  }
   const phase2Badge = s.phase === 2
     ? '<span style="background:#FFF3E0;color:#E65100;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;">7차 완성 후 추천</span>'
     : '';
@@ -669,7 +670,7 @@ function renderLectures(sessionNum) {
     <div class="page-inner">
       <div class="page-header">
         <h1 class="page-title">📚 차수별 미션</h1>
-        <p class="page-desc">차수 탭을 눌러서 해당 미션을 확인하세요.</p>
+        <p class="page-desc">지금 진행 차수는 <strong style="color:#FF6B2B;">${CONFIG.currentSession}차</strong>예요. 순서대로 진행하되, 다른 차수도 미리 볼 수 있어요.</p>
       </div>
       <div class="week-tabs-wrap">
         <div class="week-tabs">
@@ -687,6 +688,7 @@ function renderLectures(sessionNum) {
           <h2 class="lecture-title">${s.emoji} ${s.title}</h2>
           <p class="lecture-subtitle">${s.subtitle}</p>
         </div>
+        ${paceBanner}
         <div class="lecture-goal">
           <span class="goal-label">이번 미션 목표</span>
           <span class="goal-text">${s.goal}</span>
@@ -749,7 +751,7 @@ function renderSpecialSession() {
     <div class="page-inner">
       <div class="page-header">
         <h1 class="page-title">📚 차수별 미션</h1>
-        <p class="page-desc">차수 탭을 눌러서 해당 미션을 확인하세요.</p>
+        <p class="page-desc">지금 진행 차수는 <strong style="color:#FF6B2B;">${CONFIG.currentSession}차</strong>예요. 순서대로 진행하되, 다른 차수도 미리 볼 수 있어요.</p>
       </div>
       <div class="week-tabs-wrap">
         <div class="week-tabs">
