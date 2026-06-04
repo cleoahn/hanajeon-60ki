@@ -6,7 +6,7 @@
 const CONFIG = {
   cohortName: "60기",
   siteName: "한나전 온라인 작업실",
-  currentSession: 2,
+  currentSession: 3,
   orientationDate: "2026.05.30",
   phase1End: "2026.06.25",
   phase2End: "2026.07.10",
