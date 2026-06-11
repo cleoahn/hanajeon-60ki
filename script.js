@@ -186,7 +186,7 @@ const CONFIG = {
         "기한 안에 보내기 (기한 지나면 검토 비용이 추가돼요)"
       ],
       resources: [
-        { name: "📄 원고 작성 가이드 (말하듯 쓰기)", url: "" },
+        { name: "📄 원고 작성 가이드 (말하듯 쓰기)", url: "./writing-guide.html" },
         { name: "✅ 초고 완성 체크리스트", url: "./checklist-draft.html" }
       ],
       faq: [
@@ -1068,7 +1068,8 @@ function openOverlay(key) {
   var map = {
     'checklist-draft':          getChecklistContent,
     'worksheet-plan':           getPlanContent,
-    'worksheet-target-reader':  getTargetContent
+    'worksheet-target-reader':  getTargetContent,
+    'writing-guide':            getWritingGuideContent
   };
   var fn = map[key];
   if (!fn) return;
@@ -1160,7 +1161,35 @@ function getOvStyles() {
     '.ov-sl-what{background:#FFF3E0;color:#E65100}.ov-sl-why{background:#FFF8E1;color:#F57F17}',
     '.ov-sl-who{background:#F3E5F5;color:#6A1B9A}.ov-sl-how{background:#E8F5E9;color:#2E7D32}',
     '.ov-sl-etc{background:var(--cream-dark);color:var(--gray-dk)}',
-    '.ov-sum-val{color:var(--gray-dk);line-height:1.7}'
+    '.ov-sum-val{color:var(--gray-dk);line-height:1.7}',
+    /* ─ writing guide 전용 ─ */
+    '.wg-body-p{font-size:14px;color:var(--gray-dk);line-height:1.9;margin:0 0 8px}',
+    '.wg-ex-wrap{margin-top:4px}',
+    '.wg-ex-row{border-radius:10px;padding:14px 16px;margin-bottom:10px}',
+    '.wg-bad{background:#FFF3F3;border-left:4px solid #EF9A9A}',
+    '.wg-good{background:#F1F8E9;border-left:4px solid #A5D6A7}',
+    '.wg-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 10px;border-radius:20px;margin-bottom:7px}',
+    '.wg-tag.bad{background:#FFCDD2;color:#C62828}',
+    '.wg-tag.good{background:#C8E6C9;color:#1B5E20}',
+    '.wg-ex-row p{font-size:14px;color:var(--gray-dk);margin:0;line-height:1.75}',
+    '.wg-q-list{display:flex;flex-direction:column;gap:8px}',
+    '.wg-q-item{background:var(--cream);border-radius:10px;padding:11px 15px;font-size:14px;font-weight:600;color:var(--gray-dk);border-left:4px solid var(--orange-mid)}',
+    '.wg-principle{background:linear-gradient(135deg,var(--orange-lt),var(--cream));border-radius:12px;padding:20px 18px;text-align:center;border:1.5px solid var(--orange-mid)}',
+    '.wg-principle p{font-size:17px;color:var(--black);margin:0;line-height:2}',
+    '.wg-principle strong{color:var(--orange);font-size:20px}',
+    '.wg-formula{display:flex;gap:0;overflow:hidden;border-radius:12px;border:1.5px solid var(--border)}',
+    '@media(max-width:520px){.wg-formula{flex-direction:column}}',
+    '.wg-step{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 8px;background:#fff;border-right:1.5px solid var(--border);text-align:center}',
+    '.wg-step:last-child{border-right:none;border-bottom:none}',
+    '@media(max-width:520px){.wg-step{flex-direction:row;gap:12px;justify-content:flex-start;padding:12px 16px;border-right:none;border-bottom:1.5px solid var(--border)}}',
+    '.wg-step-num{width:30px;height:30px;background:var(--orange);color:#fff;border-radius:50%;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-bottom:8px}',
+    '@media(max-width:520px){.wg-step-num{margin-bottom:0}}',
+    '.wg-step-label{font-size:13px;font-weight:700;color:var(--gray-dk);line-height:1.4}',
+    '.wg-cta-box{background:linear-gradient(135deg,var(--orange),#FF9A5C);border-radius:18px;padding:30px 24px;text-align:center;margin-top:10px}',
+    '.wg-cta-title{font-size:14px;color:rgba(255,255,255,.85);margin-bottom:8px;font-weight:600}',
+    '.wg-cta-main{font-family:var(--font-head);font-size:22px;color:#fff;font-weight:700;line-height:1.55;margin-bottom:14px}',
+    '.wg-cta-main strong{display:block;font-size:26px}',
+    '.wg-cta-desc{font-size:13px;color:rgba(255,255,255,.9);line-height:1.85;margin-bottom:18px}'
   ].join('');
 }
 
@@ -1234,6 +1263,119 @@ function showTargetSummary() {
   });
   card.style.display = 'block';
   card.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ─ 원고 작성 가이드 (말하듯 쓰기) 콘텐츠 ─
+function getWritingGuideContent() {
+  function sec(icon, colorClass, title, note, body) {
+    return '<div class="ov-sec">' +
+      '<div class="ov-sec-title ' + colorClass + '">' + icon + ' ' + title + '</div>' +
+      (note ? '<div class="ov-sec-note">' + note + '</div>' : '') +
+      body +
+      '</div>';
+  }
+  function card(body) {
+    return '<div class="ov-ws-card">' + body + '</div>';
+  }
+  function exBox(bad, good) {
+    return '<div class="wg-ex-wrap">' +
+      '<div class="wg-ex-row wg-bad"><span class="wg-tag bad">나쁜 예 ✗</span><p>' + bad + '</p></div>' +
+      '<div class="wg-ex-row wg-good"><span class="wg-tag good">좋은 예 ✓</span><p>' + good + '</p></div>' +
+      '</div>';
+  }
+  function step(num, label) {
+    return '<div class="wg-step"><div class="wg-step-num">' + num + '</div><div class="wg-step-label">' + label + '</div></div>';
+  }
+  return (
+    '<div class="ov-header">' +
+      '<div class="ov-badge">한나전 60기 · 7차 미션 자료</div>' +
+      '<h1 class="ov-title">✍️ 전자책 원고는 말하듯 쓰세요</h1>' +
+      '<div class="ov-intro">' +
+        '<p>원고를 앞에 두고 막막하다면,</p>' +
+        '<p>쓰는 방식부터 바꿔봐요.</p>' +
+        '<p>&nbsp;</p>' +
+        '<p>전자책은 잘 쓰는 게 아니라<br>진짜를 꺼내는 거예요.</p>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="ov-wrap">' +
+
+    sec('📚', 'ov-s-core', '전자책은 작가처럼 쓰지 마세요',
+      '전자책은 논문이 아닙니다.',
+      card(
+        '<p class="wg-body-p">독자는 전문가의 지식을 배우고 싶은 것이 아니라<br>' +
+        '<strong>먼저 경험한 사람의 이야기</strong>를 듣고 싶어합니다.</p>' +
+        '<p class="wg-body-p">어렵게 쓰면 멀어지고,<br>솔직하게 쓰면 가까워져요.</p>'
+      )
+    ) +
+
+    sec('💬', 'ov-s-cont', '친구에게 설명하듯 쓰세요',
+      '\"내 친구가 물어본다면 어떻게 대답할까?\"로 시작해봐요.',
+      card(
+        exBox(
+          '전자책 제작 과정은 체계적인 기획과 분석을 통해 진행되어야 한다.',
+          '처음 전자책을 만들 때는 저도 뭘 써야 할지 몰랐어요.<br>그래서 일단 목차부터 적어봤습니다.'
+        )
+      )
+    ) +
+
+    sec('🌱', 'ov-s-str', '경험부터 적으세요',
+      '정보보다 경험이 먼저입니다.',
+      card(
+        exBox(
+          '쉐어하우스 운영 방법',
+          '제가 처음 쉐어하우스를 시작했을 때<br>가장 힘들었던 건 입주자 모집이었습니다.'
+        ) +
+        '<p class="wg-body-p" style="margin-top:12px;">경험으로 시작된 글은<br>독자가 끝까지 읽게 만드는 힘이 있어요.</p>'
+      )
+    ) +
+
+    sec('❓', 'ov-s-extra', '질문에 답한다고 생각하세요',
+      '독자는 항상 질문합니다.',
+      card(
+        '<div class="wg-q-list">' +
+          '<div class="wg-q-item">왜 시작했나요?</div>' +
+          '<div class="wg-q-item">어떻게 했나요?</div>' +
+          '<div class="wg-q-item">얼마나 걸렸나요?</div>' +
+          '<div class="wg-q-item">실패는 없었나요?</div>' +
+          '<div class="wg-q-item">다시 한다면 어떻게 할 건가요?</div>' +
+        '</div>' +
+        '<p class="wg-body-p" style="margin-top:14px;">이 질문들 중 하나를 골라<br>챕터를 시작해봐도 돼요.</p>'
+      )
+    ) +
+
+    sec('🎯', 'ov-s-fmt', '완벽보다 완성',
+      '한나전의 핵심 원칙',
+      card(
+        '<div class="wg-principle">' +
+          '<p>완벽한 원고보다<br><strong>완성된 원고</strong>가 더 가치 있다.</p>' +
+        '</div>' +
+        '<p class="wg-body-p" style="margin-top:10px;">지금 당장 잘 안 써져도 괜찮아요.<br>일단 끝까지 꺼내는 것, 그게 먼저예요.</p>'
+      )
+    ) +
+
+    sec('✏️', 'ov-s-vol', '클레오의 원고쓰기 공식',
+      '이 순서대로만 써봐요. 한 챕터가 완성돼요.',
+      card(
+        '<div class="wg-formula">' +
+          step('1', '경험 적기') +
+          step('2', '문제 적기') +
+          step('3', '해결 과정 적기') +
+          step('4', '결과 적기') +
+          step('5', '느낀 점 적기') +
+        '</div>'
+      )
+    ) +
+
+    '<div class="wg-cta-box">' +
+      '<div class="wg-cta-title">오늘 목표는</div>' +
+      '<div class="wg-cta-main">잘 쓰는 것이 아니라<br><strong>끝까지 쓰는 것</strong>입니다.</div>' +
+      '<p class="wg-cta-desc">전자책 초고를 완성해서<br>미션 인증 게시판에 인증해주세요.</p>' +
+      '<button class="ov-btn-main" onclick="closeOverlay()" style="width:auto;padding:12px 28px;margin-top:6px;">← 작업실로 돌아가기</button>' +
+    '</div>' +
+
+    '</div>'
+  );
 }
 
 // ─ 초고 완성 체크리스트 콘텐츠 ─
