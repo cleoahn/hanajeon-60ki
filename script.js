@@ -1189,7 +1189,46 @@ function getOvStyles() {
     '.wg-cta-title{font-size:14px;color:rgba(255,255,255,.85);margin-bottom:8px;font-weight:600}',
     '.wg-cta-main{font-family:var(--font-head);font-size:22px;color:#fff;font-weight:700;line-height:1.55;margin-bottom:14px}',
     '.wg-cta-main strong{display:block;font-size:26px}',
-    '.wg-cta-desc{font-size:13px;color:rgba(255,255,255,.9);line-height:1.85;margin-bottom:18px}'
+    '.wg-cta-desc{font-size:13px;color:rgba(255,255,255,.9);line-height:1.85;margin-bottom:18px}',
+    '.wg-flow-banner{display:flex;align-items:center;justify-content:center;gap:6px;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 12px;margin-bottom:4px;flex-wrap:wrap}',
+    '.wg-flow-step{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;font-weight:700;line-height:1.5;padding:8px 12px;border-radius:10px;text-align:center;min-width:56px}',
+    '.wg-flow-step.done{background:#E8F5E9;color:#2E7D32}',
+    '.wg-flow-step.now{background:var(--orange);color:#fff;box-shadow:0 3px 10px rgba(255,120,60,.35)}',
+    '.wg-flow-step.next{background:var(--cream);color:var(--gray-dk);opacity:.75}',
+    '.wg-flow-arrow{font-size:16px;color:var(--gray-mid);font-weight:700}',
+    '.wg-remember-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}',
+    '.wg-remember-item{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--black)}',
+    '.wg-check-done{font-size:18px}',
+    '.wg-highlight-box{background:linear-gradient(135deg,var(--orange-lt),var(--cream));border-radius:12px;padding:16px 18px;border:1.5px solid var(--orange-mid);text-align:center;font-size:15px;color:var(--black);line-height:1.85}',
+    '.wg-highlight-box strong{color:var(--orange)}',
+    '.wg-toc-example{background:var(--cream);border-radius:10px;padding:14px 16px;margin-bottom:14px}',
+    '.wg-toc-title{font-size:11px;font-weight:700;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}',
+    '.wg-toc-item{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:14px;color:var(--gray-dk);border-bottom:1px dashed var(--border)}',
+    '.wg-toc-item:last-child{border-bottom:none}',
+    '.wg-toc-num{font-size:12px;font-weight:700;color:var(--orange);min-width:28px}',
+    '.wg-stuck-box{background:#FFF3F3;border-radius:10px;padding:14px 16px;border-left:4px solid #EF9A9A}',
+    '.wg-stuck-q{font-size:13px;color:var(--gray-mid);margin:0 0 4px}',
+    '.wg-stuck-a{font-size:16px;font-weight:700;color:#C62828;margin:0}',
+    '.wg-q-transform{display:flex;flex-direction:column;gap:10px}',
+    '.wg-qt-from{background:var(--cream);border-radius:10px;padding:12px 15px}',
+    '.wg-qt-to{background:#F1F8E9;border-radius:10px;padding:12px 15px}',
+    '.wg-qt-label{font-size:11px;font-weight:700;color:var(--gray-mid);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}',
+    '.wg-qt-content{font-size:14px;font-weight:600;color:var(--black)}',
+    '.wg-qt-arrow{text-align:center;font-size:22px;color:var(--orange);font-weight:700}',
+    '.wg-ai-compare{display:flex;gap:10px}',
+    '@media(max-width:520px){.wg-ai-compare{flex-direction:column}}',
+    '.wg-ai-col{flex:1;border-radius:12px;padding:14px 13px}',
+    '.wg-ai-col.bad{background:#FFF3F3;border:1.5px solid #FFCDD2}',
+    '.wg-ai-col.good{background:#F1F8E9;border:1.5px solid #C8E6C9}',
+    '.wg-ai-col-title{font-size:12px;font-weight:700;margin-bottom:8px}',
+    '.wg-ai-col.bad .wg-ai-col-title{color:#C62828}',
+    '.wg-ai-col.good .wg-ai-col-title{color:#1B5E20}',
+    '.wg-ai-col-desc{font-size:13px;font-weight:600;color:var(--black);background:#fff;border-radius:8px;padding:8px 10px;margin-bottom:8px;text-align:center}',
+    '.wg-ai-col-result{font-size:13px;color:var(--gray-dk);line-height:1.7}',
+    '.wg-ai-steps{display:flex;flex-direction:column;gap:6px}',
+    '.wg-ai-step{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-dk);font-weight:600}',
+    '.wg-ai-n{width:22px;height:22px;background:var(--orange);color:#fff;border-radius:50%;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}',
+    '.wg-principle-cta{margin-top:14px;text-align:center;font-size:16px;font-weight:700;color:var(--orange);line-height:2}'
   ].join('');
 }
 
@@ -1300,6 +1339,96 @@ function getWritingGuideContent() {
 
     '<div class="ov-wrap">' +
 
+    // ── 흐름 배너 ──
+    '<div class="wg-flow-banner">' +
+      '<div class="wg-flow-step done">✅ 주제<br>확정</div>' +
+      '<div class="wg-flow-arrow">→</div>' +
+      '<div class="wg-flow-step done">✅ 목차<br>완성</div>' +
+      '<div class="wg-flow-arrow">→</div>' +
+      '<div class="wg-flow-step now">✏️ 원고<br>작성</div>' +
+      '<div class="wg-flow-arrow">→</div>' +
+      '<div class="wg-flow-step next">🤖 AI<br>검수</div>' +
+    '</div>' +
+
+    // ── 섹션 1: 먼저 기억하세요 ──
+    sec('📚', 'ov-s-core', '먼저 기억하세요',
+      '지금 여러분은 처음부터 쓰는 게 아닙니다.',
+      card(
+        '<div class="wg-remember-list">' +
+          '<div class="wg-remember-item"><span class="wg-check-done">✅</span> 주제를 정했고</div>' +
+          '<div class="wg-remember-item"><span class="wg-check-done">✅</span> 타겟 독자를 정했고</div>' +
+          '<div class="wg-remember-item"><span class="wg-check-done">✅</span> 목차를 만들었습니다.</div>' +
+        '</div>' +
+        '<div class="wg-highlight-box">' +
+          '<p>지금 해야 할 일은<br><strong>새로운 내용을 만드는 것이 아니라</strong></p>' +
+          '<p style="margin-top:8px;">만들어 놓은 목차에<br><strong>이야기를 채워 넣는 것</strong>입니다.</p>' +
+        '</div>'
+      )
+    ) +
+
+    // ── 섹션 2: 목차는 뼈대 ──
+    sec('📖', 'ov-s-str', '목차는 뼈대입니다',
+      '답은 이미 목차 안에 있어요.',
+      card(
+        '<div class="wg-toc-example">' +
+          '<div class="wg-toc-title">목차 예시</div>' +
+          '<div class="wg-toc-item"><span class="wg-toc-num">1장</span> 쉐어하우스를 시작하게 된 이유</div>' +
+          '<div class="wg-toc-item"><span class="wg-toc-num">2장</span> 입주자 모집 방법</div>' +
+          '<div class="wg-toc-item"><span class="wg-toc-num">3장</span> 계약 및 운영 방법</div>' +
+          '<div class="wg-toc-item"><span class="wg-toc-num">4장</span> 재계약 시스템 만들기</div>' +
+        '</div>' +
+        '<div class="wg-stuck-box">' +
+          '<p class="wg-stuck-q">많은 분들이 여기서 멈춰요.</p>' +
+          '<p class="wg-stuck-a">\"이제 뭘 써야 하지?\"</p>' +
+          '<p style="margin-top:10px;color:var(--text-main);">하지만 답은 이미 목차 안에 있습니다.</p>' +
+        '</div>'
+      )
+    ) +
+
+    // ── 섹션 3: 목차를 질문으로 ──
+    sec('🎯', 'ov-s-extra', '목차를 질문으로 바꿔보세요',
+      '각 챕터를 질문 묶음으로 풀면 원고가 나와요.',
+      card(
+        '<div class="wg-q-transform">' +
+          '<div class="wg-qt-from">' +
+            '<div class="wg-qt-label">목차</div>' +
+            '<div class="wg-qt-content">1장. 쉐어하우스를 시작하게 된 이유</div>' +
+          '</div>' +
+          '<div class="wg-qt-arrow">↓</div>' +
+          '<div class="wg-qt-to">' +
+            '<div class="wg-qt-label">질문</div>' +
+            '<div class="wg-q-list">' +
+              '<div class="wg-q-item">왜 시작했나요?</div>' +
+              '<div class="wg-q-item">어떤 상황이었나요?</div>' +
+              '<div class="wg-q-item">무엇이 가장 고민이었나요?</div>' +
+              '<div class="wg-q-item">어떤 계기로 시작했나요?</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<p class="wg-body-p" style="margin-top:14px;">원고는 <strong>질문에 답하는 과정</strong>에서 자연스럽게 나옵니다.</p>'
+      )
+    ) +
+
+    // ── 섹션 4: 목차를 원고로 바꾸는 예시 ──
+    sec('🧩', 'ov-s-cont', '목차를 원고로 바꾸는 예시',
+      '이렇게 쓰면 한 챕터가 완성돼요.',
+      card(
+        '<div class="wg-ex-wrap">' +
+          '<div class="wg-ex-row wg-bad">' +
+            '<span class="wg-tag bad">목차 ✗</span>' +
+            '<p>입주자 모집 방법</p>' +
+          '</div>' +
+          '<div class="wg-ex-row wg-good">' +
+            '<span class="wg-tag good">원고 ✓</span>' +
+            '<p>제가 처음 쉐어하우스를 시작했을 때<br>가장 힘들었던 건 입주자 모집이었습니다.<br><br>' +
+            '공실이 생기면 월세가 줄어들기 때문에<br>입주자를 구하는 것이 가장 중요했습니다.<br><br>' +
+            '처음에는 당근마켓에만 올렸는데 문의가 거의 없었습니다.<br>그래서 블로그와 대학 커뮤니티를 활용했고<br>그때부터 문의가 늘기 시작했습니다.</p>' +
+          '</div>' +
+        '</div>'
+      )
+    ) +
+
+    // ── 기존 섹션: 작가처럼 쓰지 마세요 ──
     sec('📚', 'ov-s-core', '전자책은 작가처럼 쓰지 마세요',
       '전자책은 논문이 아닙니다.',
       card(
@@ -1309,6 +1438,7 @@ function getWritingGuideContent() {
       )
     ) +
 
+    // ── 기존 섹션: 친구에게 설명하듯 ──
     sec('💬', 'ov-s-cont', '친구에게 설명하듯 쓰세요',
       '\"내 친구가 물어본다면 어떻게 대답할까?\"로 시작해봐요.',
       card(
@@ -1319,6 +1449,7 @@ function getWritingGuideContent() {
       )
     ) +
 
+    // ── 기존 섹션: 경험부터 적으세요 ──
     sec('🌱', 'ov-s-str', '경험부터 적으세요',
       '정보보다 경험이 먼저입니다.',
       card(
@@ -1330,30 +1461,48 @@ function getWritingGuideContent() {
       )
     ) +
 
-    sec('❓', 'ov-s-extra', '질문에 답한다고 생각하세요',
-      '독자는 항상 질문합니다.',
+    // ── 섹션 5: AI 활용 순서 ──
+    sec('🤖', 'ov-s-fmt', 'AI는 언제 사용할까요?',
+      '한나전은 AI를 적극 활용합니다. 단, 순서가 중요해요.',
       card(
-        '<div class="wg-q-list">' +
-          '<div class="wg-q-item">왜 시작했나요?</div>' +
-          '<div class="wg-q-item">어떻게 했나요?</div>' +
-          '<div class="wg-q-item">얼마나 걸렸나요?</div>' +
-          '<div class="wg-q-item">실패는 없었나요?</div>' +
-          '<div class="wg-q-item">다시 한다면 어떻게 할 건가요?</div>' +
+        '<div class="wg-ai-compare">' +
+          '<div class="wg-ai-col bad">' +
+            '<div class="wg-ai-col-title">❌ 추천하지 않는 방법</div>' +
+            '<div class="wg-ai-col-desc">\"AI야 전자책 한 권 써줘\"</div>' +
+            '<div class="wg-ai-col-result">→ 내 경험이 빠진<br>평범한 정보글이 됩니다.</div>' +
+          '</div>' +
+          '<div class="wg-ai-col good">' +
+            '<div class="wg-ai-col-title">✅ 추천하는 방법</div>' +
+            '<div class="wg-ai-steps">' +
+              '<div class="wg-ai-step"><span class="wg-ai-n">1</span> 내가 먼저 초고 작성</div>' +
+              '<div class="wg-ai-step"><span class="wg-ai-n">2</span> AI에게 검수 요청</div>' +
+              '<div class="wg-ai-step"><span class="wg-ai-n">3</span> 문장 다듬기</div>' +
+              '<div class="wg-ai-step"><span class="wg-ai-n">4</span> 오탈자 수정</div>' +
+              '<div class="wg-ai-step"><span class="wg-ai-n">5</span> 가독성 개선</div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        '<p class="wg-body-p" style="margin-top:14px;">이 질문들 중 하나를 골라<br>챕터를 시작해봐도 돼요.</p>'
+        '<p class="wg-body-p" style="margin-top:14px;text-align:center;">AI는 글을 대신 살아줄 수 없습니다.<br><strong>경험은 여러분만 가지고 있어요.</strong></p>'
       )
     ) +
 
-    sec('🎯', 'ov-s-fmt', '완벽보다 완성',
-      '한나전의 핵심 원칙',
+    // ── 섹션 6: 한나전의 원칙 ──
+    sec('📌', 'ov-s-vol', '한나전의 원칙',
+      '',
       card(
         '<div class="wg-principle">' +
-          '<p>완벽한 원고보다<br><strong>완성된 원고</strong>가 더 가치 있다.</p>' +
+          '<p>AI는 글을 <strong>다듬을</strong> 수 있습니다.</p>' +
+          '<p style="margin-top:8px;">하지만 경험은 <strong>대신 살아줄 수 없습니다.</strong></p>' +
+          '<p style="margin-top:14px;font-size:0.95em;color:var(--text-sub);">독자가 읽고 싶은 것은<br>AI가 만든 정보가 아니라<br>여러분이 직접 겪은 이야기입니다.</p>' +
         '</div>' +
-        '<p class="wg-body-p" style="margin-top:10px;">지금 당장 잘 안 써져도 괜찮아요.<br>일단 끝까지 꺼내는 것, 그게 먼저예요.</p>'
+        '<div class="wg-principle-cta">' +
+          '<p>먼저 경험을 쓰고,</p>' +
+          '<p>그 다음 AI의 도움을 받으세요.</p>' +
+        '</div>'
       )
     ) +
 
+    // ── 기존 섹션: 원고쓰기 공식 ──
     sec('✏️', 'ov-s-vol', '클레오의 원고쓰기 공식',
       '이 순서대로만 써봐요. 한 챕터가 완성돼요.',
       card(
@@ -1368,9 +1517,9 @@ function getWritingGuideContent() {
     ) +
 
     '<div class="wg-cta-box">' +
-      '<div class="wg-cta-title">오늘 목표는</div>' +
+      '<div class="wg-cta-title">오늘의 목표는</div>' +
       '<div class="wg-cta-main">잘 쓰는 것이 아니라<br><strong>끝까지 쓰는 것</strong>입니다.</div>' +
-      '<p class="wg-cta-desc">전자책 초고를 완성해서<br>미션 인증 게시판에 인증해주세요.</p>' +
+      '<p class="wg-cta-desc">완벽한 원고보다 <strong>완성된 원고</strong>가 더 가치 있어요.<br><br>전자책 초고를 완성해서<br>미션 인증 게시판에 인증해주세요.</p>' +
       '<button class="ov-btn-main" onclick="closeOverlay()" style="width:auto;padding:12px 28px;margin-top:6px;">← 작업실로 돌아가기</button>' +
     '</div>' +
 
